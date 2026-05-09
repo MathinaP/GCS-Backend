@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 // Public
+Route::get('/ping', fn () => response()->json(['status' => 'ok', 'message' => 'API is running']));
+
 Route::post('/login', [AuthController::class, 'login']);
 
 // Protected

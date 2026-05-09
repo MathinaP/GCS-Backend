@@ -27,9 +27,11 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set Apache public folder
+# Set Apache public folder and enable AllowOverride for .htaccess
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' \
-/etc/apache2/sites-available/000-default.conf
+    /etc/apache2/sites-available/000-default.conf && \
+    sed -i '/<\/VirtualHost>/i\\t<Directory /var/www/html/public>\n\t\tAllowOverride All\n\t<\/Directory>' \
+    /etc/apache2/sites-available/000-default.conf
 
 # Permissions
 RUN chown -R www-data:www-data /var/www/html/storage
