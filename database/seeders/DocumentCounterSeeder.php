@@ -12,13 +12,13 @@ class DocumentCounterSeeder extends Seeder
         $year = (int) now()->format('Y');
         $month = (int) now()->format('n');
         $startYear = $month >= 4 ? $year : $year - 1;
-        $financialYear = $startYear . '-' . substr((string) ($startYear + 1), -2);
+        $financialYear = substr((string) $startYear, -2) . '-' . substr((string) ($startYear + 1), -2);
 
         $counters = [
-            ['type' => 'invoice',          'prefix' => 'INV', 'last_number' => 0, 'financial_year' => $financialYear],
-            ['type' => 'proforma_invoice', 'prefix' => 'PRO', 'last_number' => 0, 'financial_year' => $financialYear],
-            ['type' => 'purchase_order',   'prefix' => 'PO',  'last_number' => 0, 'financial_year' => $financialYear],
-            ['type' => 'quotation',        'prefix' => 'QUO', 'last_number' => 0, 'financial_year' => $financialYear],
+            ['type' => 'invoice',          'prefix' => 'INV-GCS', 'last_number' => 21, 'financial_year' => $financialYear],
+            ['type' => 'proforma_invoice', 'prefix' => 'PI-GCS',  'last_number' => 0,  'financial_year' => $financialYear],
+            ['type' => 'purchase_order',   'prefix' => 'PO-GCS',  'last_number' => 0,  'financial_year' => $financialYear],
+            ['type' => 'quotation',        'prefix' => 'QTN-GCS', 'last_number' => 0,  'financial_year' => $financialYear],
         ];
 
         foreach ($counters as $counter) {

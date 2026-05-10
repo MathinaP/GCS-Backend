@@ -72,9 +72,10 @@ class DocumentController extends Controller
         $year = (int) date('Y', $ts);
         $month = (int) date('n', $ts);
         $startYear = $month >= 4 ? $year : $year - 1;
+        $shortStartYear = substr((string) $startYear, -2);
         $endYear = substr((string) ($startYear + 1), -2);
 
-        return "{$startYear}-{$endYear}";
+        return "{$shortStartYear}-{$endYear}";
     }
 
     private function counterForCurrentFinancialYear(string $type, ?string $date = null): DocumentCounter
@@ -98,10 +99,10 @@ class DocumentController extends Controller
     {
         $type    = $request->query('type', 'invoice');
         $counter = $this->counterForCurrentFinancialYear($type);
-        $seq     = str_pad($counter->last_number + 1, 4, '0', STR_PAD_LEFT);
+        $seq     = str_pad($counter->last_number + 1, 3, '0', STR_PAD_LEFT);
 
         return response()->json([
-            'doc_number' => "{$counter->prefix}-{$counter->financial_year}-{$seq}",
+            'doc_number' => "{$counter->prefix}-{$seq}/{$counter->financial_year}",
         ]);
     }
 
