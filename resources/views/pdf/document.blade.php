@@ -357,6 +357,23 @@
         <div style="margin-top: 24pt;" class="bold right">Authorised Signatory</div>
       </td>
     </tr>
+    @elseif($isQuote)
+    <tr>
+      <td class="inv-box inv-br inv-p" style="width: 50%; border-left: none;">
+        <div class="bold">Company's PAN: GTQPD3231K</div>
+        <div class="bold inv-accent" style="margin-top: 4pt;">Company's Bank Details</div>
+        <table style="margin-top: 2pt;">
+          <tr><td style="width: 44%;">A/c Holder's Name :</td><td class="bold">GO CARE SOLUTIONS</td></tr>
+          <tr><td>Bank Name :</td><td class="bold">INDIAN BANK</td></tr>
+          <tr><td>A/c No. :</td><td class="bold">8168879467</td></tr>
+          <tr><td>Branch &amp; IFS Code :</td><td class="bold">Sulur &amp; IDIB000S294</td></tr>
+        </table>
+      </td>
+      <td class="inv-box inv-p center" style="width: 50%; border-right: none;">
+        <div class="right">for <strong>GO CARE SOLUTIONS</strong></div>
+        <div style="margin-top: 24pt;" class="bold right">Authorised Signatory</div>
+      </td>
+    </tr>
     @else
     <tr>
       <td class="inv-box inv-br inv-p" style="width: 38%; border-left: none;">
@@ -386,7 +403,7 @@
   </table>
 </div>
 
-@if($isSales)
+@if($document->type === 'invoice')
 <div class="inv-footer-note">SUBJECT TO COIMBATORE JURISDICTION</div>
 <div class="center italic" style="font-size: 6.5pt; color: #555; margin-top: 1pt;">This is a Computer Generated Invoice</div>
 @endif
@@ -738,7 +755,7 @@
   @endif
 </table>
 
-@if($isSales)
+@if($document->type === 'invoice')
   <div class="center bold" style="font-size: 7pt; margin-top: 3pt;">SUBJECT TO COIMBATORE JURISDICTION</div>
   <div class="center italic" style="font-size: 6.5pt; color: #555; margin-top: 1pt;">This is a Computer Generated Invoice</div>
 @endif
