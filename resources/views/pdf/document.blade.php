@@ -281,6 +281,10 @@
           <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
         </tr>
       @endfor
+      <tr>
+        <td colspan="7" class="b p right bold">Sub Total</td>
+        <td class="b p right bold">{{ number_format((float) $document->subtotal, 2) }}</td>
+      </tr>
       @foreach($taxGroups as $tg)
         @if($isIgst)
           <tr>
@@ -633,6 +637,10 @@
     @endfor
   </tbody>
   <tfoot>
+    <tr>
+      <td colspan="7" class="b p right bold">Sub Total</td>
+      <td class="b p right bold">{{ number_format((float) $document->subtotal, 2) }}</td>
+    </tr>
     @foreach($taxGroups as $tg)
       @if($isIgst)
         <tr>
