@@ -212,17 +212,20 @@ class DocumentController extends Controller
     public function pdf(Document $document): Response
     {
         $document->load('items.material', 'customer', 'consignee', 'supplier');
+        $filename = str_replace('/', '-', $document->doc_number) . '.pdf';
 
         return Pdf::loadView('pdf.document', compact('document'))
             ->setPaper('a4', 'portrait')
-            ->download($document->doc_number . '.pdf');
+            ->download($filename);
     }
 
     public function preview(Document $document): Response
     {
         $document->load('items.material', 'customer', 'consignee', 'supplier');
+        $filename = str_replace('/', '-', $document->doc_number) . '.pdf';
+
         return Pdf::loadView('pdf.document', compact('document'))
             ->setPaper('a4', 'portrait')
-            ->stream($document->doc_number . '.pdf');
+            ->stream($filename);
     }
 }
