@@ -7,10 +7,17 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libpq-dev \
-    libzip-dev
+    libzip-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql pgsql zip
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_pgsql pgsql zip gd mbstring dom
 
 # Enable Apache rewrite
 RUN a2enmod rewrite
@@ -34,8 +41,10 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' \
     /etc/apache2/sites-available/000-default.conf
 
 # Permissions
-RUN chown -R www-data:www-data /var/www/html/storage
-RUN chmod -R 775 /var/www/html/storage
+RUN mkdir -p /var/www/html/storage/fonts /var/www/html/storage/framework/cache/data \
+    /var/www/html/storage/framework/sessions /var/www/html/storage/framework/views \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
 
