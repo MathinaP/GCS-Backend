@@ -8,7 +8,7 @@
   body { font-family: DejaVu Sans, sans-serif; font-size: 7.2pt; color: #000; padding: 2mm; }
   table { width: 100%; border-collapse: collapse; }
   td, th { vertical-align: top; }
-  .title { text-align: center; font-size: 10pt; font-weight: bold; text-decoration: underline; margin-bottom: 2.5pt; }
+  .title { text-align: center; font-size: 10pt; font-weight: bold; margin-bottom: 2.5pt; }
   .box { border: 0.5pt solid #000; border-top: none; }
   .first-box { border-top: 0.5pt solid #000; }
   .b { border: 0.5pt solid #000; }
@@ -26,7 +26,7 @@
   .italic { font-style: italic; }
   .nowrap { white-space: nowrap; }
   .inv-page { border: 0.8pt solid #000; margin: 0 auto; width: 100%; }
-  .inv-title { color: #000; text-align: center; font-size: 11pt; font-weight: bold; letter-spacing: .4pt; padding: 4pt 0; text-decoration: underline; border-bottom: 0.6pt solid #000; }
+  .inv-title { color: #000; text-align: center; font-size: 11pt; font-weight: bold; letter-spacing: .4pt; padding: 4pt 0; border-bottom: 0.6pt solid #000; }
   .inv-accent { color: #000; }
   .inv-box { border: 0.6pt solid #1d1d1d; }
   .inv-bb { border-bottom: 0.6pt solid #1d1d1d; }
@@ -319,7 +319,7 @@
     <tr>
       <td class="inv-box inv-p" style="width: 82%; border-left: none;">
         <div class="bold inv-accent">Amount Chargeable (in words)</div>
-        <div class="bold italic">INR {{ NumberToWords::convert((float) $document->grand_total) }}</div>
+        <div class="bold italic">INR {{ str_replace('Rupees ', '', NumberToWords::convert((float) $document->grand_total)) }}</div>
       </td>
       <td class="inv-box inv-p right bold" style="vertical-align: middle; border-right: none;">E. &amp; O.E</td>
     </tr>
@@ -327,7 +327,7 @@
     <tr>
       <td colspan="2" class="inv-box inv-p" style="border-left: none; border-right: none;">
         <span class="bold inv-accent">Tax Amount (in words):</span>
-        <span class="italic">INR {{ NumberToWords::convert($totalTax) }}</span>
+        <span class="italic">INR {{ str_replace('Rupees ', '', NumberToWords::convert($totalTax)) }}</span>
       </td>
     </tr>
     @endunless
@@ -354,7 +354,7 @@
       <td class="inv-box inv-br inv-p bold" style="width: 34%; height: 42pt;">Approved by</td>
       <td class="inv-box inv-p center" style="width: 33%; height: 42pt; border-right: none;">
         <div class="right">for <strong>GO CARE SOLUTIONS</strong></div>
-        <div style="margin-top: 24pt; border-top: 0.6pt solid #000; padding-top: 2pt;" class="bold right">Authorised Signatory</div>
+        <div style="margin-top: 24pt;" class="bold right">Authorised Signatory</div>
       </td>
     </tr>
     @else
@@ -379,7 +379,7 @@
       <td class="inv-box inv-br inv-p bold" style="width: 50%; height: 39pt; border-left: none;">Customer's Seal and Signature</td>
       <td class="inv-box inv-p center" colspan="2" style="width: 50%; height: 39pt; border-right: none;">
         <div class="right">for <strong>GO CARE SOLUTIONS</strong></div>
-        <div style="margin-top: 22pt; border-top: 0.6pt solid #000; padding-top: 2pt;" class="bold right">Authorised Signatory</div>
+        <div style="margin-top: 22pt;" class="bold right">Authorised Signatory</div>
       </td>
     </tr>
     @endif
@@ -391,11 +391,6 @@
 <div class="center italic" style="font-size: 6.5pt; color: #555; margin-top: 1pt;">This is a Computer Generated Invoice</div>
 @endif
 
-@if($document->notes)
-  <div class="b p" style="margin-top: 3pt; font-size: 7pt;">
-    <strong>Notes / Terms &amp; Conditions:</strong><br>{{ $document->notes }}
-  </div>
-@endif
 
 @else
 
@@ -676,7 +671,7 @@
   <tr>
     <td class="br p" style="width: 82%;">
       <div class="bold">Amount Chargeable (in words)</div>
-      <div class="bold italic">INR {{ NumberToWords::convert((float) $document->grand_total) }}</div>
+      <div class="bold italic">INR {{ str_replace('Rupees ', '', NumberToWords::convert((float) $document->grand_total)) }}</div>
     </td>
     <td class="p right bold" style="vertical-align: middle;">E. &amp; O.E</td>
   </tr>
@@ -684,7 +679,7 @@
     <tr>
       <td colspan="2" class="p" style="border-top: 0.5pt solid #000;">
         <span class="bold">Tax Amount (in words) :</span>
-        <span class="italic">INR {{ NumberToWords::convert($totalTax) }}</span>
+        <span class="italic">INR {{ str_replace('Rupees ', '', NumberToWords::convert($totalTax)) }}</span>
       </td>
     </tr>
   @endunless
@@ -706,7 +701,7 @@
       </td>
       <td class="p center" style="width: 45%;">
         <div>for <strong>GO CARE SOLUTIONS</strong></div>
-        <div style="margin-top: 28pt; border-top: 0.5pt solid #000; padding-top: 2pt;" class="bold">Authorised Signatory</div>
+        <div style="margin-top: 28pt;" class="bold">Authorised Signatory</div>
       </td>
     </tr>
     @if($isPO)
@@ -734,7 +729,7 @@
       </td>
       <td class="p center" style="width: 23%;">
         <div>for <strong>GO CARE SOLUTIONS</strong></div>
-        <div style="margin-top: 28pt; border-top: 0.5pt solid #000; padding-top: 2pt;" class="bold">Authorised Signatory</div>
+        <div style="margin-top: 28pt;" class="bold">Authorised Signatory</div>
       </td>
     </tr>
     <tr>
@@ -748,11 +743,6 @@
   <div class="center italic" style="font-size: 6.5pt; color: #555; margin-top: 1pt;">This is a Computer Generated Invoice</div>
 @endif
 
-@if($document->notes)
-  <div class="b p" style="margin-top: 3pt; font-size: 7pt;">
-    <strong>Notes / Terms &amp; Conditions:</strong><br>{{ $document->notes }}
-  </div>
-@endif
 
 @endif
 
