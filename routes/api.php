@@ -25,9 +25,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('document-counters', DocumentCounterController::class)->only(['index', 'update']);
 
     // Explicit document routes must come BEFORE apiResource to avoid {document} param capture
-    Route::get('documents/next-number',        [DocumentController::class, 'nextNumber']);
-    Route::get('documents/{document}/pdf',     [DocumentController::class, 'pdf']);
-    Route::get('documents/{document}/preview', [DocumentController::class, 'preview']);
+    Route::get('documents/next-number',                        [DocumentController::class, 'nextNumber']);
+    Route::get('documents/{document}/pdf',                     [DocumentController::class, 'pdf']);
+    Route::get('documents/{document}/preview',                 [DocumentController::class, 'preview']);
+    Route::patch('documents/{document}/payment-status',        [DocumentController::class, 'updatePaymentStatus']);
     Route::apiResource('documents', DocumentController::class);
 
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);

@@ -12,7 +12,7 @@ class Document extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'type', 'doc_number', 'date', 'status',
+        'type', 'doc_number', 'date', 'status', 'payment_status',
         'customer_id', 'consignee_id', 'supplier_id',
         'reference_no', 'reference_date', 'other_reference', 'delivery_note', 'payment_terms',
         'buyers_order_no', 'buyers_order_date', 'dispatch_doc_no', 'delivery_note_date',

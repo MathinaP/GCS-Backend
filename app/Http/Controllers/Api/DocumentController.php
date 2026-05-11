@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -207,6 +208,27 @@ class DocumentController extends Controller
     {
         $document->delete();
         return response()->json(null, 204);
+    }
+
+    public function updatePaymentStatus(Document $document, Request $request): JsonResponse
+    {
+        if ($document->type === 'proforma_invoice') {
+            return response()->json(['message' => 'Proforma invoices do not have a payment status.'], 422);
+        }
+
+        $allowed = match ($document->type) {
+            'invoice', 'purchase_order' => ['paid', 'unpaid'],
+            'quotation'                 => ['pending', 'approved', 'rejected'],
+            default                     => [],
+        };
+
+        $request->validate([
+            'payment_status' => ['required', 'string', Rule::in($allowed)],
+        ]);
+
+        $document->update(['payment_status' => $request->payment_status]);
+
+        return response()->json(['payment_status' => $document->payment_status]);
     }
 
     public function pdf(Document $document): Response
