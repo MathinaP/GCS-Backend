@@ -370,7 +370,7 @@
           <tr><td>A/c No. :</td><td class="bold">8168879467</td></tr>
           <tr><td>Branch &amp; IFS Code :</td><td class="bold">Sulur &amp; IDIB000S294</td></tr>
         </table>
-        <div style="margin-top: 10pt;" class="right">for <strong>GO CARE SOLUTIONS</strong></div>
+        <div style="margin-top: 10pt; border-top: 0.6pt solid #000; padding-top: 3pt;" class="right">for <strong>GO CARE SOLUTIONS</strong></div>
         <div style="margin-top: 20pt;" class="bold right">Authorised Signatory</div>
       </td>
     </tr>
@@ -717,7 +717,7 @@
         </table>
       </td>
       <td class="p center" style="width: 45%;">
-        <div>for <strong>GO CARE SOLUTIONS</strong></div>
+        <div style="border-top: 0.5pt solid #000; padding-top: 3pt;">for <strong>GO CARE SOLUTIONS</strong></div>
         <div style="margin-top: 28pt;" class="bold">Authorised Signatory</div>
       </td>
     </tr>
