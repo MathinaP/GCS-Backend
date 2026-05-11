@@ -15,6 +15,7 @@ class DocumentResource extends JsonResource
             'doc_number'          => $this->doc_number,
             'date'                => $this->date?->toDateString(),
             'status'              => $this->status,
+            'payment_status'      => $this->payment_status,
             'customer_id'         => $this->customer_id,
             'consignee_id'        => $this->consignee_id,
             'supplier_id'         => $this->supplier_id,
