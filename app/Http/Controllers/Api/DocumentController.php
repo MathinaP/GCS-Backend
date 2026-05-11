@@ -213,8 +213,9 @@ class DocumentController extends Controller
     {
         $document->load('items.material', 'customer', 'consignee', 'supplier');
         $filename = str_replace('/', '-', $document->doc_number) . '.pdf';
+        $showSeal = request()->boolean('seal', false);
 
-        return Pdf::loadView('pdf.document', compact('document'))
+        return Pdf::loadView('pdf.document', compact('document', 'showSeal'))
             ->setPaper('a4', 'portrait')
             ->download($filename);
     }
@@ -223,8 +224,9 @@ class DocumentController extends Controller
     {
         $document->load('items.material', 'customer', 'consignee', 'supplier');
         $filename = str_replace('/', '-', $document->doc_number) . '.pdf';
+        $showSeal = request()->boolean('seal', false);
 
-        return Pdf::loadView('pdf.document', compact('document'))
+        return Pdf::loadView('pdf.document', compact('document', 'showSeal'))
             ->setPaper('a4', 'portrait')
             ->stream($filename);
     }

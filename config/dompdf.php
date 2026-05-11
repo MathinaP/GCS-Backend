@@ -12,6 +12,7 @@ return [
         'chroot' => realpath(base_path()),
         'allowed_protocols' => [
             'data://' => ['rules' => []],
+            'data:'   => ['rules' => []],
             'file://' => ['rules' => []],
             'http://' => ['rules' => []],
             'https://' => ['rules' => []],
