@@ -42,6 +42,8 @@
   .inv-row td { border-left: 0.6pt solid #1d1d1d; border-right: 0.6pt solid #1d1d1d; padding: 4pt 3pt; height: 20pt; }
   .inv-muted { color: #555; }
   .inv-footer-note { text-align: center; font-size: 6.8pt; color: #000; font-weight: bold; margin-top: 3pt; }
+  .page-break-before { page-break-before: always; }
+  .inv-footer-block { page-break-inside: avoid; }
 </style>
 </head>
 <body>
@@ -102,7 +104,19 @@
 
   $totalQty = $document->items->sum(fn($i) => (float) $i->quantity);
   $totalTax = (float) $document->cgst_amount + (float) $document->sgst_amount + (float) $document->igst_amount;
-  $fillerRows = max(0, 5 - $document->items->count());
+
+  // Page chunking: max 6 items per page; if more than 6 items the header repeats on each page.
+  // Last page carries the footer — keeping ≤6 items there leaves enough room for the
+  // declaration + signature + totals block without DomPDF auto-breaking to a headerless page.
+  $invItems        = $document->items->values();
+  $invCount        = $invItems->count();
+  $maxItemsPerPage = 6;
+  if ($invCount <= $maxItemsPerPage) {
+      $itemChunks = [$invItems];
+  } else {
+      $itemChunks = array_values($invItems->chunk($maxItemsPerPage)->all());
+  }
+  $totalDocPages = count($itemChunks);
 @endphp
 
 
@@ -114,7 +128,8 @@
   $taxPrefix = $gstPrefix ? $gstPrefix.' ' : '';
 @endphp
 
-<div class="inv-page">
+@foreach($itemChunks as $pageIdx => $pageItems)
+<div class="inv-page{{ $pageIdx > 0 ? ' page-break-before' : '' }}">
   <div class="inv-title">{{ $docTitle }}</div>
 
   <table>
@@ -268,7 +283,7 @@
       </tr>
     </thead>
     <tbody>
-      @foreach($document->items as $item)
+      @foreach($pageItems as $item)
         <tr class="inv-row">
           <td class="center">{{ $item->sl_no }}</td>
           <td><strong>{{ $item->description }}</strong></td>
@@ -280,11 +295,7 @@
           <td class="right bold">{{ number_format((float) $item->amount, 2) }}</td>
         </tr>
       @endforeach
-      @for($r = 0; $r < $fillerRows; $r++)
-        <tr class="inv-row">
-          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-        </tr>
-      @endfor
+      @if($pageIdx === $totalDocPages - 1)
       <tr>
         <td colspan="7" class="b p right bold">Sub Total</td>
         <td class="b p right bold">{{ number_format((float) $document->subtotal, 2) }}</td>
@@ -316,9 +327,15 @@
         <td colspan="3" class="b p"></td>
         <td class="b p right bold" style="font-size: 9pt;">&#8377; {{ number_format((float) $document->grand_total, 2) }}</td>
       </tr>
+      @endif
     </tbody>
   </table>
 
+  @if($pageIdx < $totalDocPages - 1)
+  <div style="text-align: right; font-size: 6.5pt; padding: 3pt 4pt; border-top: 0.6pt solid #1d1d1d;">continued to page {{ $pageIdx + 2 }}</div>
+  @else
+
+  <div class="inv-footer-block">
   <table>
     <tr>
       <td class="inv-box inv-p" style="width: 82%; border-left: none;">
@@ -420,12 +437,16 @@
     </tr>
     @endif
   </table>
-</div>
 
-@if($document->type === 'invoice')
-<div class="inv-footer-note">SUBJECT TO COIMBATORE JURISDICTION</div>
-<div class="center italic" style="font-size: 6.5pt; color: #555; margin-top: 1pt;">This is a Computer Generated Invoice</div>
-@endif
+  @if($document->type === 'invoice')
+  <div class="inv-footer-note">SUBJECT TO COIMBATORE JURISDICTION</div>
+  <div class="center italic" style="font-size: 6.5pt; color: #555; margin-top: 1pt;">This is a Computer Generated Invoice</div>
+  @endif
+  </div>{{-- .inv-footer-block --}}
+
+  @endif
+</div>
+@endforeach
 
 
 @else
@@ -660,12 +681,6 @@
         <td class="b p right">{{ number_format((float) $item->amount, 2) }}</td>
       </tr>
     @endforeach
-    @for($r = 0; $r < $fillerRows; $r++)
-      <tr>
-        <td class="b p"></td><td class="b p"></td><td class="b p"></td><td class="b p"></td>
-        <td class="b p"></td><td class="b p"></td><td class="b p"></td><td class="b p"></td>
-      </tr>
-    @endfor
   </tbody>
   <tfoot>
     <tr>
