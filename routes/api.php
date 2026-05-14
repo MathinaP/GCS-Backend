@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\DocumentCounterController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\UnitController;
 use Illuminate\Support\Facades\Route;
 
 // Public
@@ -19,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',     [AuthController::class, 'me']);
 
+    Route::apiResource('units', UnitController::class);
     Route::apiResource('materials', MaterialController::class);
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('suppliers', SupplierController::class);
