@@ -110,7 +110,7 @@
   // declaration + signature + totals block without DomPDF auto-breaking to a headerless page.
   $invItems        = $document->items->values();
   $invCount        = $invItems->count();
-  $maxItemsPerPage = 6;
+  $maxItemsPerPage = 10;
   if ($invCount <= $maxItemsPerPage) {
       $itemChunks = [$invItems];
   } else {
