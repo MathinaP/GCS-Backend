@@ -26,7 +26,7 @@ class MaterialController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'material_name'       => 'required|string|max:255',
+            'material_name'       => 'required|string|max:255|unique:materials,material_name',
             'unit_of_measurement' => 'required|string|max:50',
             'hsn_code'            => 'nullable|string|max:20',
             'default_rate'        => 'nullable|numeric|min:0',
@@ -45,7 +45,7 @@ class MaterialController extends Controller
     public function update(Request $request, Material $material): MaterialResource
     {
         $validated = $request->validate([
-            'material_name'       => 'sometimes|required|string|max:255',
+            'material_name'       => 'sometimes|required|string|max:255|unique:materials,material_name,' . $material->id,
             'unit_of_measurement' => 'sometimes|required|string|max:50',
             'hsn_code'            => 'nullable|string|max:20',
             'default_rate'        => 'nullable|numeric|min:0',
