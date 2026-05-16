@@ -18,7 +18,7 @@ class MaterialController extends Controller
                 ->orWhere('hsn_code', 'ilike', "%{$request->q}%"))
             ->when($request->has('active'), fn($q) => $q->where('is_active', filter_var($request->active, FILTER_VALIDATE_BOOLEAN)))
             ->orderBy('material_name')
-            ->paginate(50);
+            ->paginate(500);
 
         return MaterialResource::collection($materials);
     }
