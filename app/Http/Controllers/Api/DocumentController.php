@@ -64,6 +64,7 @@ class DocumentController extends Controller
         'round_off'           => 'nullable|numeric',
         'grand_total'         => 'required|numeric',
         'notes'               => 'nullable|string',
+        'annexure_items'      => 'nullable|array',
         'items'               => 'required|array|min:1',
     ];
 

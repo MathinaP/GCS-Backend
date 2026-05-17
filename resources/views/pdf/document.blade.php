@@ -797,5 +797,33 @@
 
 @endif
 
+@if(!empty($document->annexure_items['rows']))
+<div style="page-break-before: always;">
+  <div style="border: 0.8pt solid #000; padding: 4pt 6pt; margin-bottom: 4pt; text-align: center; font-size: 11pt; font-weight: bold; letter-spacing: 1pt;">
+    ANNEXURE
+  </div>
+  <table style="width: 100%; border-collapse: collapse; font-size: 7pt;">
+    <thead>
+      <tr>
+        <th style="border: 0.5pt solid #000; padding: 3pt 4pt; background: #f0f0f0; text-align: center; width: 5%;">S.No</th>
+        @foreach($document->annexure_items['headers'] as $header)
+          <th style="border: 0.5pt solid #000; padding: 3pt 4pt; background: #f0f0f0; text-align: center;">{{ $header }}</th>
+        @endforeach
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($document->annexure_items['rows'] as $rIdx => $row)
+        <tr>
+          <td style="border: 0.5pt solid #000; padding: 2pt 4pt; text-align: center;">{{ $rIdx + 1 }}</td>
+          @foreach($row as $cell)
+            <td style="border: 0.5pt solid #000; padding: 2pt 4pt;">{{ $cell }}</td>
+          @endforeach
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
+@endif
+
 </body>
 </html>

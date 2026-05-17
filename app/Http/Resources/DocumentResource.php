@@ -46,6 +46,7 @@ class DocumentResource extends JsonResource
             'round_off'           => (float) $this->round_off,
             'grand_total'         => (float) $this->grand_total,
             'notes'               => $this->notes,
+            'annexure_items'      => $this->annexure_items,
             'items'               => DocumentItemResource::collection($this->whenLoaded('items')),
             'created_at'          => $this->created_at,
             'updated_at'          => $this->updated_at,

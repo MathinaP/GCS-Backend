@@ -20,7 +20,7 @@ class Document extends Model
         'quotation_no', 'quotation_date', 'packing_charges',
         'pr_no', 'quotation_validity',
         'subtotal', 'cgst_amount', 'sgst_amount', 'igst_amount', 'round_off', 'grand_total',
-        'notes',
+        'notes', 'annexure_items',
     ];
 
     protected $casts = [
@@ -36,6 +36,7 @@ class Document extends Model
         'round_off'          => 'decimal:2',
         'grand_total'        => 'decimal:2',
         'packing_charges'    => 'decimal:2',
+        'annexure_items'     => 'array',
     ];
 
     public function customer(): BelongsTo
