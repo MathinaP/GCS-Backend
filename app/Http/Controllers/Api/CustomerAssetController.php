@@ -71,7 +71,7 @@ class CustomerAssetController extends Controller
             'compressor_model'        => 'sometimes|required|string|max:255',
             'service_dealer'          => 'nullable|string|max:255',
             'product'                 => 'sometimes|required|string|in:ENCAP,EG SERIES,RECPIT,HORIZON SERIES,GLOBAL SERIES',
-            'compressor_make'         => 'sometimes|required|string|in:Elgi,Atlascopco,CP Compressor,Keaiser,IR Compressor,China Compressor,Airwa',
+            'compressor_make'         => 'sometimes|required|string|in:ELGI,ATLASCOPCO,CP COMPRESSOR,KEAISER,IR COMPRESSOR,CHINA COMPRESSOR,AIRWA',
             'service_engineer'        => 'nullable|string|max:255',
             'contact_person_name'     => 'sometimes|required|string|max:255',
             'contact_person_mail'     => 'sometimes|required|email|max:255',
