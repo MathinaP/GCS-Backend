@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CustomerAssetController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DocumentCounterController;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('units', UnitController::class);
     Route::apiResource('materials', MaterialController::class);
     Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('customer-assets', CustomerAssetController::class);
     Route::apiResource('suppliers', SupplierController::class);
     Route::apiResource('document-counters', DocumentCounterController::class)->only(['index', 'update']);
 
