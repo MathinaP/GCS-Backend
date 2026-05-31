@@ -162,8 +162,10 @@ class ServiceReportController extends Controller
     {
         $serviceReport->load('customer', 'customerAsset');
 
-        if (! $serviceReport->site_person_mail) {
-            return response()->json(['message' => 'No email address on this report.'], 422);
+        $email = $request->input('email') ?: $serviceReport->site_person_mail;
+
+        if (! $email) {
+            return response()->json(['message' => 'No email address provided.'], 422);
         }
 
         $pdfContent = Pdf::loadView('pdf.service_report', ['report' => $serviceReport])
@@ -172,10 +174,10 @@ class ServiceReportController extends Controller
 
         $filename = str_replace('/', '-', $serviceReport->report_number) . '.pdf';
 
-        Mail::to($serviceReport->site_person_mail)
+        Mail::to($email)
             ->cc('gocaresolutions01@gmail.com')
             ->send(new ServiceReportMail($serviceReport, $pdfContent, $filename));
 
-        return response()->json(['message' => 'Report sent to ' . $serviceReport->site_person_mail]);
+        return response()->json(['message' => 'Report sent to ' . $email]);
     }
 }
