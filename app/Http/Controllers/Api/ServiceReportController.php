@@ -158,7 +158,7 @@ class ServiceReportController extends Controller
             ->download($filename);
     }
 
-    public function sendMail(ServiceReport $serviceReport): JsonResponse
+    public function sendMail(Request $request, ServiceReport $serviceReport): JsonResponse
     {
         $serviceReport->load('customer', 'customerAsset');
 
