@@ -3,37 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @page { margin: 10mm 10mm 10mm 10mm; size: A4 portrait; }
+  @page { margin: 12mm 12mm 12mm 12mm; size: A4 portrait; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: DejaVu Sans, sans-serif; font-size: 7pt; color: #000; }
+  body { font-family: DejaVu Sans, sans-serif; font-size: 7.2pt; color: #000; }
   table { width: 100%; border-collapse: collapse; }
   td, th { vertical-align: top; }
-  .page { border: 0.8pt solid #000; }
-  .header-row { border-bottom: 0.8pt solid #000; padding: 5pt 7pt; }
-  .co-name { font-size: 10pt; font-weight: bold; }
-  .co-info { font-size: 6.5pt; line-height: 1.5; margin-top: 2pt; }
-  .report-no { font-size: 8pt; font-weight: bold; text-align: right; }
-  .report-date-lbl { font-size: 6pt; color: #555; text-align: right; }
-  .doc-title { text-align: center; font-size: 10.5pt; font-weight: bold; padding: 4pt 0; border-bottom: 0.8pt solid #000; background: #f2f2f2; }
-  .info-grid td { border: 0.5pt solid #000; padding: 2.5pt 4pt; }
-  .lbl { font-size: 6pt; color: #555; }
-  .val { font-weight: bold; font-size: 7pt; min-height: 9pt; }
-  .section-head { background: #333; color: #fff; font-size: 7pt; font-weight: bold; padding: 3pt 5pt; text-transform: uppercase; letter-spacing: 0.3pt; }
-  .params th { background: #555; color: #fff; text-align: center; padding: 3pt; font-size: 6.5pt; border: 0.5pt solid #000; }
-  .params td { border: 0.5pt solid #000; padding: 2.5pt 4pt; font-size: 6.5pt; }
-  .params .mandatory { background: #fffde7; }
-  .center { text-align: center; }
-  .bold { font-weight: bold; }
-  .page-footer { text-align: center; font-size: 6pt; color: #444; border-top: 0.8pt solid #000; padding: 3pt; margin-top: 4pt; }
+
+  .page       { border: 0.8pt solid #000; width: 100%; }
+  .inv-company{ font-size: 12pt; font-weight: bold; letter-spacing: .3pt; }
+  .small      { font-size: 6.5pt; line-height: 1.5; }
+  .center     { text-align: center; }
+  .bold       { font-weight: bold; }
+  .right      { text-align: right; }
+
+  .hdr        { border-bottom: 0.8pt solid #000; padding: 6pt 8pt; }
+
+  .doc-title  { text-align: center; font-size: 10pt; font-weight: bold;
+                letter-spacing: .5pt; padding: 4pt 0;
+                border-bottom: 0.8pt solid #000; background: #f5f5f5; }
+
+  .grid td    { border: 0.6pt solid #000; padding: 3pt 5pt; }
+  .lbl        { font-size: 6pt; color: #555; margin-bottom: 1pt; }
+  .val        { font-weight: bold; font-size: 7.2pt; min-height: 9pt; }
+
+  .sec-head td{ background: #222; color: #fff; font-size: 6.8pt; font-weight: bold;
+                text-transform: uppercase; letter-spacing: .4pt; padding: 3pt 5pt; }
+
+  .params th  { background: #444; color: #fff; font-size: 6.8pt; font-weight: bold;
+                border: 0.6pt solid #000; padding: 3pt 4pt; }
+  .params td  { border: 0.6pt solid #000; padding: 2.5pt 4pt; font-size: 7pt; }
+  .params .mand { background: #fffde7; }
+
+  .footer     { border-top: 0.8pt solid #000; padding: 4pt 8pt;
+                text-align: center; font-size: 6.5pt; color: #333; }
 </style>
 </head>
 <body>
 @php
-  $logoPath = public_path('logo.png');
+  $logoPath = str_replace('\\', '/', public_path('GCS logo png.PNG'));
   $params   = $report->parameters ?? [];
   $fmtDate  = fn($d) => $d ? \Carbon\Carbon::parse($d)->format('d-m-Y') : '—';
 
-  // [key, label, hasActual, hasResponse, mandatory]
   $paramDefs = [
     ['af_replaced',                    'Is AF replaced',                                 true,  true,  true],
     ['of_replaced',                    'Is OF replaced',                                 true,  true,  true],
@@ -89,24 +99,24 @@
 <div class="page">
 
   {{-- HEADER --}}
-  <table class="header-row">
+  <table class="hdr">
     <tr>
-      <td style="width: 55pt; vertical-align: middle;">
+      <td style="width:60pt; vertical-align:middle; text-align:center;">
         @if(file_exists($logoPath))
-          <img src="{{ $logoPath }}" style="width: 50pt; height: 50pt; object-fit: contain;" />
+          <img src="{{ $logoPath }}" style="width:52pt; height:52pt; object-fit:contain;" />
         @endif
       </td>
-      <td>
-        <div class="co-name">GO CARE SOLUTIONS</div>
-        <div class="co-info">
+      <td style="padding-left:6pt;">
+        <div class="inv-company">GO CARE SOLUTIONS</div>
+        <div class="small" style="margin-top:3pt;">
           Old No. 14/36-D, New No. 36-D, Mahaliamman Kovil Street, Irugur, Coimbatore – 641 402<br>
           Mobile: 8148302081 / 9360740074 &nbsp;|&nbsp; Email: gocaresolutions01@gmail.com<br>
           GSTIN: 33GTQPD3231K1ZM &nbsp;|&nbsp; PAN: GTQPD3231K
         </div>
       </td>
-      <td style="width: 90pt; vertical-align: middle; text-align: right; padding-right: 3pt;">
-        <div class="report-no">{{ $report->report_number }}</div>
-        <div class="report-date-lbl">{{ $fmtDate($report->report_date) }}</div>
+      <td style="width:95pt; vertical-align:middle; text-align:right; padding-right:2pt;">
+        <div style="font-size:9pt; font-weight:bold;">{{ $report->report_number }}</div>
+        <div class="small" style="color:#555; margin-top:2pt;">{{ $fmtDate($report->report_date) }}</div>
       </td>
     </tr>
   </table>
@@ -115,7 +125,7 @@
   <div class="doc-title">CUSTOMER SERVICE REPORT</div>
 
   {{-- INFO GRID --}}
-  <table class="info-grid">
+  <table class="grid">
     <tr>
       <td style="width:25%"><div class="lbl">Report Date</div><div class="val">{{ $fmtDate($report->report_date) }}</div></td>
       <td style="width:25%"><div class="lbl">Report No</div><div class="val">{{ $report->report_number }}</div></td>
@@ -147,101 +157,94 @@
   </table>
 
   {{-- PARAMETERS --}}
-  <div style="margin-top: 5pt;">
-    <table class="params">
-      <thead>
-        <tr>
-          <th style="width:55%; text-align:left; padding-left:5pt;">PARAMETERS</th>
-          <th style="width:22%">ACTUALS</th>
-          <th style="width:23%">RESPONSE</th>
+  <table class="params">
+    <thead>
+      <tr>
+        <th style="width:56%; text-align:left; padding-left:6pt;">Parameters</th>
+        <th style="width:22%">Actuals</th>
+        <th style="width:22%">Response</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($paramDefs as [$key, $label, $hasActual, $hasResponse, $mandatory])
+        @php
+          $p             = $params[$key] ?? [];
+          $actual        = $hasActual   ? ($p['actual']   ?? '') : '';
+          $response      = $hasResponse ? ($p['response'] ?? '') : '';
+          $displayActual = $actual !== '' ? $actual : ($mandatory ? 'N/A' : '');
+        @endphp
+        <tr class="{{ $mandatory ? 'mand' : '' }}">
+          <td style="padding-left:6pt;">{{ $mandatory ? '★ ' : '' }}{{ $label }}</td>
+          <td class="center">{{ $displayActual }}</td>
+          <td class="center">{{ $response }}</td>
         </tr>
-      </thead>
-      <tbody>
-        @foreach($paramDefs as [$key, $label, $hasActual, $hasResponse, $mandatory])
-          @php
-            $p        = $params[$key] ?? [];
-            $actual   = $hasActual   ? ($p['actual']   ?? '') : '';
-            $response = $hasResponse ? ($p['response'] ?? '') : '';
-            $displayActual = $actual !== '' ? $actual : ($mandatory ? 'N/A' : '');
-          @endphp
-          <tr class="{{ $mandatory ? 'mandatory' : '' }}">
-            <td>{{ $label }}</td>
-            <td class="center">{{ $displayActual }}</td>
-            <td class="center">{{ $response }}</td>
-          </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+      @endforeach
+    </tbody>
+  </table>
 
   {{-- WORK DONE --}}
-  <div style="margin-top: 5pt;">
-    <table class="info-grid">
-      <tr>
-        <td style="width:30%"><div class="lbl">NO OF VISITS MADE</div><div class="val">{{ $report->no_of_visits ?? '—' }}</div></td>
-        <td style="width:35%"><div class="lbl">IS SERVICE CHARGES APPLICABLE</div><div class="val">{{ $report->service_charges_applicable ? 'Yes' : 'No' }}</div></td>
-        <td><div class="lbl">SERVICE CHARGES</div><div class="val">{{ $report->service_charges ? '₹ ' . number_format((float)$report->service_charges, 2) : '—' }}</div></td>
-      </tr>
-      <tr>
-        <td colspan="3"><div class="lbl">PARTS RECOMMENDED FOR SERVICE</div><div class="val" style="min-height:16pt;">{{ $report->parts_recommended ?? '' }}</div></td>
-      </tr>
-      <tr>
-        <td colspan="3"><div class="lbl">WORK DONE</div><div class="val" style="min-height:35pt;">{{ $report->work_done ?? '' }}</div></td>
-      </tr>
-    </table>
-  </div>
+  <table class="grid">
+    <tr class="sec-head"><td colspan="3">Work Done</td></tr>
+    <tr>
+      <td style="width:30%"><div class="lbl">No. of Visits Made</div><div class="val">{{ $report->no_of_visits ?? '—' }}</div></td>
+      <td style="width:35%"><div class="lbl">Service Charges Applicable</div><div class="val">{{ $report->service_charges_applicable ? 'Yes' : 'No' }}</div></td>
+      <td><div class="lbl">Service Charges</div><div class="val">{{ $report->service_charges ? '₹ ' . number_format((float)$report->service_charges, 2) : '—' }}</div></td>
+    </tr>
+    <tr>
+      <td colspan="3"><div class="lbl">Parts Recommended for Service</div><div class="val" style="min-height:14pt;">{{ $report->parts_recommended ?? '' }}</div></td>
+    </tr>
+    <tr>
+      <td colspan="3"><div class="lbl">Work Done</div><div class="val" style="min-height:30pt;">{{ $report->work_done ?? '' }}</div></td>
+    </tr>
+  </table>
 
-  {{-- ENGINEER / FEEDBACK --}}
-  <div style="margin-top: 5pt;">
-    <table class="info-grid">
-      <tr>
-        <td style="width:50%"><div class="lbl">ENGINEER</div><div class="val">{{ $report->engineer ?? '—' }}</div></td>
-        <td><div class="lbl">CONTACT NO</div><div class="val">{{ $report->engineer_contact ?? '—' }}</div></td>
-      </tr>
-      <tr>
-        <td colspan="2"><div class="lbl">DEALER</div><div class="val">{{ $report->dealer ?? '—' }}</div></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="lbl">CUSTOMER FEEDBACK</div>
-          <div class="val">
-            {{ $report->customer_feedback ?? '—' }}
-            @if($report->customer_feedback_percentage !== null)
-              &nbsp;({{ $report->customer_feedback_percentage }}%)
-            @endif
-          </div>
-        </td>
-        <td><div class="lbl">FEEDBACK REMARKS</div><div class="val">{{ $report->customer_feedback_remarks ?? '' }}</div></td>
-      </tr>
-      <tr>
-        <td colspan="2"><div class="lbl">ENGINEER REMARKS</div><div class="val" style="min-height:20pt;">{{ $report->engineer_remarks ?? '' }}</div></td>
-      </tr>
-    </table>
-  </div>
+  {{-- ENGINEER & FEEDBACK --}}
+  <table class="grid">
+    <tr class="sec-head"><td colspan="2">Engineer &amp; Feedback</td></tr>
+    <tr>
+      <td style="width:50%"><div class="lbl">Engineer</div><div class="val">{{ $report->engineer ?? '—' }}</div></td>
+      <td><div class="lbl">Contact No</div><div class="val">{{ $report->engineer_contact ?? '—' }}</div></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="lbl">Customer Feedback</div>
+        <div class="val">
+          {{ $report->customer_feedback ?? '—' }}
+          @if($report->customer_feedback_percentage !== null)
+            &nbsp;({{ $report->customer_feedback_percentage }}%)
+          @endif
+        </div>
+      </td>
+      <td><div class="lbl">Feedback Remarks</div><div class="val">{{ $report->customer_feedback_remarks ?? '' }}</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><div class="lbl">Engineer Remarks</div><div class="val" style="min-height:18pt;">{{ $report->engineer_remarks ?? '' }}</div></td>
+    </tr>
+  </table>
 
   {{-- SIGNATURE --}}
-  <div style="margin-top: 5pt;">
-    <table class="info-grid">
-      <tr>
-        <td style="width:50%; min-height:65pt; padding: 5pt 8pt;">
-          <div class="lbl">NAME</div>
-          <div style="height: 45pt;"></div>
-          <div class="bold" style="font-size:7pt;">{{ $report->engineer ?? '' }}</div>
-        </td>
-        <td style="text-align:center; padding:5pt;">
-          <div class="lbl" style="margin-bottom:4pt;">SIGNATURE</div>
-          @if($report->signature)
-            <img src="{{ $report->signature }}" style="max-width:140pt; max-height:55pt; object-fit:contain;" />
-          @else
-            <div style="height:55pt;"></div>
-          @endif
-        </td>
-      </tr>
-    </table>
-  </div>
+  <table class="grid">
+    <tr class="sec-head"><td colspan="2">Authorised Signature</td></tr>
+    <tr>
+      <td style="width:50%; padding:6pt 8pt;">
+        <div class="lbl">Name</div>
+        <div style="height:42pt;"></div>
+        <div class="bold" style="font-size:7pt; border-top:0.5pt solid #bbb; padding-top:3pt;">{{ $report->engineer ?? '' }}</div>
+      </td>
+      <td style="text-align:center; padding:6pt 8pt;">
+        <div class="lbl" style="margin-bottom:4pt;">Customer Signature</div>
+        @if($report->signature)
+          <img src="{{ $report->signature }}" style="max-width:140pt; max-height:50pt; object-fit:contain;" />
+        @else
+          <div style="height:50pt;"></div>
+        @endif
+        <div style="border-top:0.5pt solid #bbb; margin-top:3pt; padding-top:2pt; font-size:6.5pt; color:#555;">Signature</div>
+      </td>
+    </tr>
+  </table>
 
   {{-- FOOTER --}}
-  <div class="page-footer">
+  <div class="footer">
     GO CARE SOLUTIONS &nbsp;|&nbsp; Old No. 14/36-D, New No. 36-D, Mahaliamman Kovil Street, Irugur, Coimbatore – 641 402
     &nbsp;|&nbsp; Mobile: 8148302081 / 9360740074 &nbsp;|&nbsp; Email: gocaresolutions01@gmail.com
   </div>
