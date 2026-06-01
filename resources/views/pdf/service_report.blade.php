@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @page { margin: 33mm 10mm 16mm 10mm; size: A4 portrait; }
+  @page { margin: 5mm 10mm 5mm 10mm; size: A4 portrait; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: DejaVu Sans, sans-serif; font-size: 7.5pt; color: #000; }
   table { width: 100%; border-collapse: collapse; }
@@ -157,6 +157,9 @@
 </div>
 
 {{-- ══ CONTENT ══ --}}
+
+{{-- Spacer to push page-1 content below the fixed header --}}
+<div style="height: 32mm;"></div>
 
 <div class="doc-title">CUSTOMER SERVICE REPORT</div>
 
