@@ -29,6 +29,7 @@ class ServiceReportController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $reports = ServiceReport::with(['customer', 'customerAsset'])
+            ->when($request->fab, fn ($q) => $q->where('fabrication_number', $request->fab))
             ->when($request->q, fn ($q) => $q
                 ->where('report_number', 'ilike', "%{$request->q}%")
                 ->orWhere('company_name',       'ilike', "%{$request->q}%")
@@ -146,6 +147,12 @@ class ServiceReportController extends Controller
         $serviceReport->update($validated);
         $serviceReport->load('customer', 'customerAsset');
         return response()->json(new ServiceReportResource($serviceReport));
+    }
+
+    public function destroy(ServiceReport $serviceReport): JsonResponse
+    {
+        $serviceReport->delete();
+        return response()->json(['message' => 'Report deleted.']);
     }
 
     public function pdf(ServiceReport $serviceReport): Response
