@@ -74,7 +74,14 @@ class ExpenseController extends Controller
             ->whereBetween('date', [$from, $to])
             ->sum('grand_total');
 
-        // Total expenses in period
+        // Purchase Order costs (what you paid suppliers)
+        $poCosts = DB::table('documents')
+            ->whereNull('deleted_at')
+            ->where('type', 'purchase_order')
+            ->whereBetween('date', [$from, $to])
+            ->sum('grand_total');
+
+        // Total manual expenses in period (fuel, salary, rent etc.)
         $totalExpenses = Expense::whereBetween('date', [$from, $to])->sum('amount');
 
         // Expenses grouped by category
@@ -84,7 +91,7 @@ class ExpenseController extends Controller
             ->orderByRaw('SUM(amount) DESC')
             ->get();
 
-        // Monthly revenue
+        // Monthly revenue from invoices
         $monthlyRevenue = DB::table('documents')
             ->whereNull('deleted_at')
             ->where('type', 'invoice')
@@ -94,33 +101,47 @@ class ExpenseController extends Controller
             ->get()
             ->keyBy('month');
 
-        // Monthly expenses
+        // Monthly PO costs
+        $monthlyPo = DB::table('documents')
+            ->whereNull('deleted_at')
+            ->where('type', 'purchase_order')
+            ->whereBetween('date', [$from, $to])
+            ->selectRaw("TO_CHAR(DATE_TRUNC('month', date), 'YYYY-MM') as month, SUM(grand_total) as po_costs")
+            ->groupByRaw("DATE_TRUNC('month', date)")
+            ->get()
+            ->keyBy('month');
+
+        // Monthly manual expenses
         $monthlyExpenses = Expense::whereBetween('date', [$from, $to])
             ->selectRaw("TO_CHAR(DATE_TRUNC('month', date), 'YYYY-MM') as month, SUM(amount) as expenses")
             ->groupByRaw("DATE_TRUNC('month', date)")
             ->get()
             ->keyBy('month');
 
-        // Merge into unified monthly list
+        // Merge all months
         $allMonths = collect(array_unique(array_merge(
             $monthlyRevenue->keys()->toArray(),
+            $monthlyPo->keys()->toArray(),
             $monthlyExpenses->keys()->toArray()
         )))->sort()->values();
 
         $monthly = $allMonths->map(fn($m) => [
             'month'    => $m,
             'revenue'  => (float) ($monthlyRevenue->get($m)?->revenue  ?? 0),
+            'po_costs' => (float) ($monthlyPo->get($m)?->po_costs      ?? 0),
             'expenses' => (float) ($monthlyExpenses->get($m)?->expenses ?? 0),
-            'profit'   => (float) ($monthlyRevenue->get($m)?->revenue  ?? 0)
-                        - (float) ($monthlyExpenses->get($m)?->expenses ?? 0),
+            'profit'   => (float) ($monthlyRevenue->get($m)?->revenue   ?? 0)
+                        - (float) ($monthlyPo->get($m)?->po_costs       ?? 0)
+                        - (float) ($monthlyExpenses->get($m)?->expenses  ?? 0),
         ]);
 
         return response()->json([
             'from'        => $from,
             'to'          => $to,
             'revenue'     => (float) $revenue,
+            'po_costs'    => (float) $poCosts,
             'expenses'    => (float) $totalExpenses,
-            'profit'      => (float) $revenue - (float) $totalExpenses,
+            'profit'      => (float) $revenue - (float) $poCosts - (float) $totalExpenses,
             'by_category' => $byCategory,
             'monthly'     => $monthly,
         ]);
