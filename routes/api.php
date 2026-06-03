@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CustomerAssetController;
+use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\ServiceReportController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
@@ -45,6 +46,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('documents', DocumentController::class);
 
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
+
+    // Expenses & Profit
+    Route::get('expenses/summary', [ExpenseController::class, 'summary']);
+    Route::apiResource('expenses', ExpenseController::class)->except(['show']);
 
     Route::get('service-reports/next-number',                   [ServiceReportController::class, 'nextNumber']);
     Route::post('service-reports/{serviceReport}/send-mail',    [ServiceReportController::class, 'sendMail']);
