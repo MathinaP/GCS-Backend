@@ -40,6 +40,12 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' \
     sed -i '/<\/VirtualHost>/i\\t<Directory /var/www/html/public>\n\t\tAllowOverride All\n\t<\/Directory>' \
     /etc/apache2/sites-available/000-default.conf
 
+# Increase PHP limits (DomPDF needs extra memory; PDF generation can take time)
+RUN echo "memory_limit = 256M" > /usr/local/etc/php/conf.d/99-custom.ini \
+    && echo "max_execution_time = 120" >> /usr/local/etc/php/conf.d/99-custom.ini \
+    && echo "post_max_size = 20M" >> /usr/local/etc/php/conf.d/99-custom.ini \
+    && echo "upload_max_filesize = 20M" >> /usr/local/etc/php/conf.d/99-custom.ini
+
 # Permissions
 RUN mkdir -p /var/www/html/storage/fonts /var/www/html/storage/framework/cache/data \
     /var/www/html/storage/framework/sessions /var/www/html/storage/framework/views \

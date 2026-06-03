@@ -10,10 +10,18 @@ use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UnitController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-// Public
-Route::get('/ping', fn () => response()->json(['status' => 'ok', 'message' => 'API is running']));
+// Public — used by UptimeRobot to keep Render + Neon awake
+Route::get('/ping', function () {
+    try {
+        DB::select('SELECT 1');
+        return response()->json(['status' => 'ok', 'db' => 'connected']);
+    } catch (\Throwable $e) {
+        return response()->json(['status' => 'ok', 'db' => 'error'], 200);
+    }
+});
 
 Route::post('/login', [AuthController::class, 'login']);
 

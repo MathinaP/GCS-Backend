@@ -80,31 +80,35 @@ class DocumentController extends Controller
         return "{$shortStartYear}-{$endYear}";
     }
 
+    // Must be called inside an existing DB::transaction() — relies on the outer transaction for locking.
     private function counterForCurrentFinancialYear(string $type, ?string $date = null): DocumentCounter
     {
-        return DB::transaction(function () use ($type, $date) {
-            $counter = DocumentCounter::where('type', $type)->lockForUpdate()->firstOrFail();
-            $financialYear = $this->currentFinancialYear($date);
+        $counter = DocumentCounter::where('type', $type)->lockForUpdate()->firstOrFail();
+        $financialYear = $this->currentFinancialYear($date);
 
-            if ($counter->financial_year !== $financialYear) {
-                $counter->update([
-                    'financial_year' => $financialYear,
-                    'last_number' => 0,
-                ]);
-            }
+        if ($counter->financial_year !== $financialYear) {
+            $counter->update([
+                'financial_year' => $financialYear,
+                'last_number' => 0,
+            ]);
+            $counter->refresh();
+        }
 
-            return $counter->fresh();
-        });
+        return $counter;
     }
 
     public function nextNumber(Request $request): JsonResponse
     {
         $type    = $request->query('type', 'invoice');
-        $counter = $this->counterForCurrentFinancialYear($type);
-        $seq     = str_pad($counter->last_number + 1, 3, '0', STR_PAD_LEFT);
+        $counter = DocumentCounter::where('type', $type)->firstOrFail();
+        $financialYear = $this->currentFinancialYear();
+
+        $nextNum = $counter->financial_year === $financialYear
+            ? $counter->last_number + 1
+            : 1;
 
         return response()->json([
-            'doc_number' => "{$counter->prefix}-{$seq}/{$counter->financial_year}",
+            'doc_number' => "{$counter->prefix}-" . str_pad($nextNum, 3, '0', STR_PAD_LEFT) . "/{$financialYear}",
         ]);
     }
 
