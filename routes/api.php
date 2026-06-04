@@ -47,10 +47,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
 
-    // Expenses & Profit — blocked for system_admin role
+    // Expenses CRUD — all roles can add/view expenses
+    Route::apiResource('expenses', ExpenseController::class)->except(['show']);
+
+    // Profit summary — super_admin only
     Route::middleware('role.admin')->group(function () {
         Route::get('expenses/summary', [ExpenseController::class, 'summary']);
-        Route::apiResource('expenses', ExpenseController::class)->except(['show']);
     });
 
     Route::get('service-reports/next-number',                   [ServiceReportController::class, 'nextNumber']);
