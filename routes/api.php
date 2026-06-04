@@ -47,13 +47,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
 
+    // Profit summary must come BEFORE apiResource to avoid {expense} param capture
+    Route::middleware('role.admin')->get('expenses/summary', [ExpenseController::class, 'summary']);
+
     // Expenses CRUD — all roles can add/view expenses
     Route::apiResource('expenses', ExpenseController::class)->except(['show']);
-
-    // Profit summary — super_admin only
-    Route::middleware('role.admin')->group(function () {
-        Route::get('expenses/summary', [ExpenseController::class, 'summary']);
-    });
 
     Route::get('service-reports/next-number',                   [ServiceReportController::class, 'nextNumber']);
     Route::post('service-reports/{serviceReport}/send-mail',    [ServiceReportController::class, 'sendMail']);
