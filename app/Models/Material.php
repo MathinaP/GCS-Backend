@@ -18,6 +18,6 @@ class Material extends Model
     protected $casts = [
         'default_rate' => 'decimal:2',
         'gst_rate'     => 'decimal:2',
-        'is_active'    => 'boolean',
+        'is_active'    => \App\Casts\PgBoolean::class,
     ];
 }

@@ -30,8 +30,8 @@ class CustomerAsset extends Model
     ];
 
     protected $casts = [
-        'amc'                 => 'boolean',
-        'is_active'           => 'boolean',
+        'amc'                 => \App\Casts\PgBoolean::class,
+        'is_active'           => \App\Casts\PgBoolean::class,
         'hours_meter_reading' => 'decimal:2',
         'hmr_date'            => 'date',
         'amc_start_date'      => 'date',

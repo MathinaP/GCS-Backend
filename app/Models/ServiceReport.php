@@ -28,7 +28,7 @@ class ServiceReport extends Model
         'total_hmr'                    => 'decimal:2',
         'customer_feedback_percentage' => 'decimal:2',
         'service_charges'              => 'decimal:2',
-        'service_charges_applicable'   => 'boolean',
+        'service_charges_applicable'   => \App\Casts\PgBoolean::class,
         'parameters'                   => 'array',
     ];
 
