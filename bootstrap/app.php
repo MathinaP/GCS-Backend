@@ -18,7 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
 
         // Override 'auth' so redirectTo() returns null instead of calling route('login')
-        $middleware->alias(['auth' => \App\Http\Middleware\Authenticate::class]);
+        $middleware->alias([
+            'auth'         => \App\Http\Middleware\Authenticate::class,
+            'role.admin'   => \App\Http\Middleware\RequireAdminRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Fallback: return JSON 401 for all api/* unauthenticated requests

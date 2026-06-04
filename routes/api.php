@@ -47,9 +47,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
 
-    // Expenses & Profit
-    Route::get('expenses/summary', [ExpenseController::class, 'summary']);
-    Route::apiResource('expenses', ExpenseController::class)->except(['show']);
+    // Expenses & Profit — blocked for system_admin role
+    Route::middleware('role.admin')->group(function () {
+        Route::get('expenses/summary', [ExpenseController::class, 'summary']);
+        Route::apiResource('expenses', ExpenseController::class)->except(['show']);
+    });
 
     Route::get('service-reports/next-number',                   [ServiceReportController::class, 'nextNumber']);
     Route::post('service-reports/{serviceReport}/send-mail',    [ServiceReportController::class, 'sendMail']);
