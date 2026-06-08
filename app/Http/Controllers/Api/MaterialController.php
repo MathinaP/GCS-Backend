@@ -16,7 +16,10 @@ class MaterialController extends Controller
         $materials = Material::query()
             ->when($request->q, fn($q) => $q->where('material_name', 'ilike', "%{$request->q}%")
                 ->orWhere('hsn_code', 'ilike', "%{$request->q}%"))
-            ->when($request->has('active'), fn($q) => $q->where('is_active', filter_var($request->active, FILTER_VALIDATE_BOOLEAN)))
+            ->when($request->has('active'), function ($q) use ($request) {
+                $val = filter_var($request->active, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+                $q->whereRaw("\"is_active\" = $val");
+            })
             ->orderBy('material_name')
             ->paginate(500);
 

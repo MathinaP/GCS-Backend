@@ -14,7 +14,7 @@ class CustomerAssetController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $assets = CustomerAsset::with('customer')
-            ->where('is_active', true)
+            ->whereRaw('"is_active" = true')
             ->when($request->q, fn ($q) => $q->where('fabrication_number', 'ilike', "%{$request->q}%")
                 ->orWhere('compressor_model', 'ilike', "%{$request->q}%")
                 ->orWhere('compressor_make', 'ilike', "%{$request->q}%"))

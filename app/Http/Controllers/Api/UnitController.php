@@ -15,7 +15,10 @@ class UnitController extends Controller
     {
         $units = Unit::query()
             ->when($request->q, fn($q) => $q->where('name', 'ilike', "%{$request->q}%"))
-            ->when($request->has('active'), fn($q) => $q->where('is_active', filter_var($request->active, FILTER_VALIDATE_BOOLEAN)))
+            ->when($request->has('active'), function ($q) use ($request) {
+                $val = filter_var($request->active, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+                $q->whereRaw("\"is_active\" = $val");
+            })
             ->orderBy('name')
             ->paginate(100);
 
