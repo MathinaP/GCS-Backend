@@ -3,38 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @page { margin: 3mm 8mm 16mm 8mm; size: A4 portrait; }
+  @page { margin: 3mm 8mm 3mm 8mm; size: A4 portrait; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: DejaVu Sans, sans-serif; font-size: 7.5pt; color: #000; }
-  table { width: 100%; border-collapse: collapse; }
-  td, th { vertical-align: middle; }
 
-  /* ── Fixed footer repeats on every page ── */
-  #ftr {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 13mm;
-    background: #fff;
+  /* ── Outer page wrapper — thead/tfoot repeat on every page ── */
+  .page-tbl { width: 100%; border-collapse: collapse; }
+
+  /* ── Header cell ── */
+  .hdr-cell {
+    padding: 4pt 6pt 4pt 6pt;
+    border-bottom: 1.2pt solid #000;
+    vertical-align: middle;
+  }
+  .hdr-inner { width: 100%; border-collapse: collapse; }
+  .hdr-inner td { border: none; padding: 0; vertical-align: middle; }
+  .co-name { font-size: 13pt; font-weight: bold; letter-spacing: .3pt; }
+  .co-info { font-size: 6.8pt; color: #333; line-height: 1.6; margin-top: 3pt; }
+
+  /* ── Footer cell ── */
+  .ftr-cell {
     border-top: 1pt solid #000;
     padding: 3pt 8pt;
     text-align: center;
     font-size: 6.5pt;
     color: #333;
   }
-
-  /* ── Outer page wrapper table ── */
-  .page-tbl { width: 100%; border-collapse: collapse; }
-
-  /* ── thead: repeats on every page automatically ── */
-  .hdr-cell {
-    padding: 4pt 6pt 4pt 6pt;
-    border-bottom: 1.2pt solid #000;
-    vertical-align: middle;
-  }
-  .hdr-cell table { border: none; }
-  .hdr-cell td   { border: none; padding: 0; vertical-align: middle; }
-  .co-name { font-size: 13pt; font-weight: bold; letter-spacing: .3pt; }
-  .co-info { font-size: 6.8pt; color: #333; line-height: 1.6; margin-top: 3pt; }
 
   /* ── Content cell ── */
   .content-cell { padding: 0; vertical-align: top; }
@@ -48,18 +42,20 @@
   }
 
   /* ── Info grid ── */
+  .ig { width: 100%; border-collapse: collapse; }
   .ig td  { border: 0.6pt solid #000; padding: 3pt 5pt; vertical-align: middle; }
+  .ig tr  { page-break-inside: avoid; }
   .lbl    { font-weight: bold; font-size: 6.8pt; text-transform: uppercase;
             white-space: nowrap; width: 1%; }
   .val    { font-size: 7.5pt; }
 
   /* ── Parameters ── */
+  .pt { width: 100%; border-collapse: collapse; }
   .pt th  { border: 0.6pt solid #000; padding: 3.5pt 5pt; font-size: 7.5pt;
             font-weight: bold; text-transform: uppercase; background: #d8d8d8; }
   .pt td  { border: 0.6pt solid #000; padding: 2.5pt 5pt; font-size: 7pt;
             vertical-align: middle; }
   .pt tr  { page-break-inside: avoid; }
-  .ig tr  { page-break-inside: avoid; }
   .mand   { background: #fffde7; }
 
   /* ── Section head row ── */
@@ -88,60 +84,55 @@
     ['fine_filter_replaced',          'Is Fine filter replaced',                      true,  true,  true ],
     ['carbon_filter_replaced',        'Is Carbon Filter replaced',                    true,  true,  true ],
     ['oil_used',                      'Oil used',                                     true,  false, false],
-    ['ambient_temperature',           'Ambient temperature (°C)',                      true,  true,  false],
-    ['discharge_oil_temperature',     'Discharge oil temperature (°C)',                true,  true,  false],
-    ['room_temperature',              'Room temperature (°C)',                         true,  true,  false],
-    ['aos_differential_pressure',     'AOS Differential pressure (kg/cm²)',            true,  true,  false],
-    ['load_pressure',                 'Load pressure (kg/cm²)',                        true,  true,  false],
-    ['unload_pressure',               'Unload pressure (kg/cm²)',                      true,  true,  false],
-    ['working_pressure',              'Working pressure (kg/cm²)',                     true,  false, false],
-    ['r_load_current',                'R - Load Current (amps)',                       true,  false, false],
-    ['y_load_current',                'Y - Load Current (amps)',                       true,  false, false],
-    ['b_load_current',                'B - Load Current (amps)',                       true,  false, false],
-    ['r_unload_current',              'R - Unload Current (amps)',                     true,  false, false],
-    ['y_unload_current',              'Y - Unload Current (amps)',                     true,  false, false],
-    ['b_unload_current',              'B - Unload Current (amps)',                     true,  false, false],
-    ['fan_motor_current',             'Fan Motor Current (amps)',                      true,  false, false],
-    ['incoming_single_phase_current', 'Incoming single phase current (amps)',          true,  false, false],
-    ['ry_incoming_voltage',           'RY - Incoming voltage (volts)',                 true,  true,  false],
-    ['yb_incoming_voltage',           'YB - Incoming voltage (volts)',                 true,  true,  false],
-    ['br_incoming_voltage',           'BR - Incoming voltage (volts)',                 true,  true,  false],
-    ['fan_motor_voltage',             'Fan Motor voltage (volts)',                     true,  false, false],
-    ['incoming_single_phase_voltage', 'Incoming single phase voltage (volts)',         true,  false, false],
-    ['earth_to_neutral_voltage',      'Earth to Neutral voltage (volts)',               true,  false, false],
-    ['hmr_last_oil_changed',          'HMR - Last oil changed',                        true,  false, false],
-    ['drive_coupling_condition',      'Is the Drive Coupling condition good',           false, true,  false],
-    ['cooler_condition',              'Is the Cooler condition good',                   false, true,  false],
-    ['pre_filter_condition',          'Is the Pre filter condition good',               false, true,  false],
-    ['min_pressure_valve',            'Is the Minimum pressure valve functioning',      false, true,  false],
-    ['actuator_functioning',          'Is the Actuator functioning',                   false, true,  false],
-    ['intake_valve_functioning',      'Is the Intake valve functioning',               false, true,  false],
-    ['blow_down_valve_functioning',   'Is the Blow down valve functioning',             false, true,  false],
-    ['pressure_regulator_valve',      'Is the Pressure regulator valve functioning',   false, true,  false],
-    ['thermal_valve_element',         'Is the Thermal valve element functioning',       false, true,  false],
-    ['safety_valve_functioning',      'Is the Safety valve functioning',               false, true,  false],
-    ['solenoid_valve_functioning',    'Is the Solenoid valve functioning',             false, true,  false],
-    ['nrv_return_line',               'Is the NRV (Return line) condition good',       false, true,  false],
-    ['visual_condition_oil',          'Is the Visual condition of Oil good',           false, true,  false],
-    ['air_filter_condition',          'Is the Air Filter condition good',              false, true,  false],
-    ['mos_adv_functioning',           'Is the MOS ADV functioning',                   false, true,  false],
-    ['load_count',                    'Load count',                                    true,  true,  false],
-    ['unload_sump_pressure',          'Unload Sump Pressure (kg/cm²)',                 true,  true,  false],
+    ['ambient_temperature',           'Ambient temperature (°C)',                     true,  true,  false],
+    ['discharge_oil_temperature',     'Discharge oil temperature (°C)',               true,  true,  false],
+    ['room_temperature',              'Room temperature (°C)',                        true,  true,  false],
+    ['aos_differential_pressure',     'AOS Differential pressure (kg/cm²)',           true,  true,  false],
+    ['load_pressure',                 'Load pressure (kg/cm²)',                       true,  true,  false],
+    ['unload_pressure',               'Unload pressure (kg/cm²)',                     true,  true,  false],
+    ['working_pressure',              'Working pressure (kg/cm²)',                    true,  false, false],
+    ['r_load_current',                'R - Load Current (amps)',                      true,  false, false],
+    ['y_load_current',                'Y - Load Current (amps)',                      true,  false, false],
+    ['b_load_current',                'B - Load Current (amps)',                      true,  false, false],
+    ['r_unload_current',              'R - Unload Current (amps)',                    true,  false, false],
+    ['y_unload_current',              'Y - Unload Current (amps)',                    true,  false, false],
+    ['b_unload_current',              'B - Unload Current (amps)',                    true,  false, false],
+    ['fan_motor_current',             'Fan Motor Current (amps)',                     true,  false, false],
+    ['incoming_single_phase_current', 'Incoming single phase current (amps)',         true,  false, false],
+    ['ry_incoming_voltage',           'RY - Incoming voltage (volts)',                true,  true,  false],
+    ['yb_incoming_voltage',           'YB - Incoming voltage (volts)',                true,  true,  false],
+    ['br_incoming_voltage',           'BR - Incoming voltage (volts)',                true,  true,  false],
+    ['fan_motor_voltage',             'Fan Motor voltage (volts)',                    true,  false, false],
+    ['incoming_single_phase_voltage', 'Incoming single phase voltage (volts)',        true,  false, false],
+    ['earth_to_neutral_voltage',      'Earth to Neutral voltage (volts)',             true,  false, false],
+    ['hmr_last_oil_changed',          'HMR - Last oil changed',                      true,  false, false],
+    ['drive_coupling_condition',      'Is the Drive Coupling condition good',         false, true,  false],
+    ['cooler_condition',              'Is the Cooler condition good',                 false, true,  false],
+    ['pre_filter_condition',          'Is the Pre filter condition good',             false, true,  false],
+    ['min_pressure_valve',            'Is the Minimum pressure valve functioning',    false, true,  false],
+    ['actuator_functioning',          'Is the Actuator functioning',                 false, true,  false],
+    ['intake_valve_functioning',      'Is the Intake valve functioning',             false, true,  false],
+    ['blow_down_valve_functioning',   'Is the Blow down valve functioning',           false, true,  false],
+    ['pressure_regulator_valve',      'Is the Pressure regulator valve functioning', false, true,  false],
+    ['thermal_valve_element',         'Is the Thermal valve element functioning',     false, true,  false],
+    ['safety_valve_functioning',      'Is the Safety valve functioning',             false, true,  false],
+    ['solenoid_valve_functioning',    'Is the Solenoid valve functioning',           false, true,  false],
+    ['nrv_return_line',               'Is the NRV (Return line) condition good',     false, true,  false],
+    ['visual_condition_oil',          'Is the Visual condition of Oil good',         false, true,  false],
+    ['air_filter_condition',          'Is the Air Filter condition good',            false, true,  false],
+    ['mos_adv_functioning',           'Is the MOS ADV functioning',                 false, true,  false],
+    ['load_count',                    'Load count',                                  true,  true,  false],
+    ['unload_sump_pressure',          'Unload Sump Pressure (kg/cm²)',               true,  true,  false],
   ];
 @endphp
 
-{{-- ══ FIXED FOOTER (repeats via position:fixed) ══ --}}
-<div id="ftr">
-  GO CARE SOLUTIONS &nbsp;|&nbsp; Old No. 14/36-D, New No. 36-D, Mahaliamman Kovil Street, Irugur, Coimbatore – 641 402
-  &nbsp;|&nbsp; Mobile: 8148302081 / 9360740074 &nbsp;|&nbsp; Email: gocaresolutions01@gmail.com
-</div>
-
-{{-- ══ PAGE WRAPPER TABLE — thead repeats the header on every page ══ --}}
 <table class="page-tbl">
+
+  {{-- HEADER — repeats on every page --}}
   <thead>
     <tr>
       <td class="hdr-cell">
-        <table>
+        <table class="hdr-inner">
           <tr>
             <td style="width:62pt; text-align:center; padding-right:6pt;">
               @if(file_exists($logoPath))
@@ -166,6 +157,17 @@
     </tr>
   </thead>
 
+  {{-- FOOTER — repeats on every page --}}
+  <tfoot>
+    <tr>
+      <td class="ftr-cell">
+        GO CARE SOLUTIONS &nbsp;|&nbsp; Old No. 14/36-D, New No. 36-D, Mahaliamman Kovil Street, Irugur, Coimbatore – 641 402
+        &nbsp;|&nbsp; Mobile: 8148302081 / 9360740074 &nbsp;|&nbsp; Email: gocaresolutions01@gmail.com
+      </td>
+    </tr>
+  </tfoot>
+
+  {{-- CONTENT --}}
   <tbody>
     <tr>
       <td class="content-cell">
@@ -306,7 +308,7 @@
           </tr>
         </table>
 
-        <table style="border-collapse:collapse; width:100%;">
+        <table style="width:100%; border-collapse:collapse;">
           <tr>
             <td class="sig-td" style="width:50%;">&nbsp;</td>
             <td class="sig-td" style="width:50%;">
@@ -321,7 +323,7 @@
       </td>
     </tr>
   </tbody>
-</table>
 
+</table>
 </body>
 </html>
