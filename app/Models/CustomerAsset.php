@@ -11,6 +11,7 @@ class CustomerAsset extends Model
         'customer_id',
         'fabrication_number',
         'compressor_model',
+        'compressor_manufacturing_year',
         'service_dealer',
         'product',
         'compressor_make',
