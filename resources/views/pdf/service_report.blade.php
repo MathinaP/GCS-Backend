@@ -147,7 +147,7 @@
       <td>
         <div class="co-name">GO CARE SOLUTIONS</div>
         <div class="co-info">
-          Old No. 14/36-D, New No. 36-D, Mahaliamman Kovil Street, Irugur, Coimbatore – 641 402<br>
+          No. 1/164-C, Ottam Thottam,Appanaickenpatti,Kanagayampalayam, Coimbatore - 641 402.<br>
           Mobile: 8148302081 / 9360740074 &nbsp;|&nbsp; Email: gocaresolutions01@gmail.com<br>
           GSTIN: 33GTQPD3231K1ZM &nbsp;|&nbsp; PAN: GTQPD3231K
         </div>
@@ -162,7 +162,7 @@
 
 {{-- ══ FOOTER (in bottom margin, does not affect content flow) ══ --}}
 <div id="ftr">
-  GO CARE SOLUTIONS &nbsp;|&nbsp; Old No. 14/36-D, New No. 36-D, Mahaliamman Kovil Street, Irugur, Coimbatore – 641 402
+  GO CARE SOLUTIONS &nbsp;|&nbsp; No. 1/164-C, Ottam Thottam,Appanaickenpatti,Kanagayampalayam, Coimbatore - 641 402.
   &nbsp;|&nbsp; Mobile: 8148302081 / 9360740074 &nbsp;|&nbsp; Email: gocaresolutions01@gmail.com
 </div>
 
